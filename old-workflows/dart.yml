@@ -33,8 +33,8 @@ jobs:
       # - run: flutter test
       - run: flutter --version 
 
-      # - name: Build Android app
-        # run: flutter build apk   
+      - name: Build Android app
+        run: flutter build apk   
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       # - name: Verify formatting
