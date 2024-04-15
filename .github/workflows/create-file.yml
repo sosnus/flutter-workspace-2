@@ -25,13 +25,13 @@ jobs:
           name: my-artifact
           path: generated-file.txt
 
-          
-  create_release:
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # create_release:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
       # Download the artifact
       - name: Download artifact
