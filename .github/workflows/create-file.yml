@@ -1,4 +1,4 @@
-name: Update Text File
+name: Update Text File and Publish Release
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  update_text_file:
+  update_text_file_and_publish_release:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,52 @@ jobs:
         with:
           name: text-file-artifact
           path: workspace/text_file.txt
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            This is an automated release created by GitHub Actions.
+            Timestamp: $(date)
+          draft: false
+          prerelease: false
+
+
+
+# name: Update Text File
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   update_text_file:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Prepare workspace
+#         run: |
+#           mkdir -p workspace
+#           cd workspace
+#           echo "Preparing workspace..."
+      
+#       - name: Create text file with actual timestamp
+#         run: |
+#           cd workspace
+#           echo "Creating text file with actual timestamp..."
+#           echo $(date) > text_file.txt
+      
+#       - name: Publish text file as artifact
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: text-file-artifact
+#           path: workspace/text_file.txt
 
 
 # name: Build and Deploy
