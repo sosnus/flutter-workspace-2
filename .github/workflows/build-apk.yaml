@@ -1,0 +1,82 @@
+name: Publish apk release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_text_file_and_publish_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+
+
+      - name: Prepare workspace
+        run: |
+          mkdir -p workspace
+          cd workspace
+          echo "Preparing workspace..."
+
+      
+      - name: Install dependencies
+        run: flutter pub get
+
+
+      # - run: flutter pub get
+      # - run: flutter test
+      - run: flutter --version 
+
+      - name: Build Android app
+        run: flutter build apk       
+      
+      - name: Create text file with actual timestamp
+        run: |
+          cd workspace
+          echo "Creating text file with actual timestamp..."
+          echo $(date) > text_file.txt
+      
+      - name: Publish text file as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: text-file-artifact
+          path: workspace/text_file.txt
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}  # Use your Personal Access Token here
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            This is an automated release created by GitHub Actions.
+            Timestamp: $(date)
+          draft: false
+          prerelease: false
+      
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}  # Use your Personal Access Token here
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: workspace/text_file.txt
+          asset_name: text_file.txt
+          asset_content_type: text/plain
+
+      
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}  # Use your Personal Access Token here
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build\app\outputs\flutter-apk\app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
