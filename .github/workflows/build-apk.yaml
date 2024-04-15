@@ -38,11 +38,19 @@ jobs:
           echo "Creating text file with actual timestamp..."
           echo $(date) > text_file.txt
       
-      - name: Publish text file as artifact
+      - name: Publish text file as artifact1
         uses: actions/upload-artifact@v2
         with:
           name: text-file-artifact
           path: workspace/text_file.txt
+      
+
+            
+      - name: Publish APK as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk
+          path: build\app\outputs\flutter-apk\app-release.apk
       
       - name: Create Release
         id: create_release
