@@ -45,12 +45,24 @@ jobs:
           path: workspace/text_file.txt
       
 
+      - name: Ls files1
+        run: ls $HOME
+
+      - name: Ls files2
+        run: ls .
+
+      - name: Ls files3
+        run: ls ./build/app/outputs/flutter-apk/
+
+
+      - name: Ls files4
+        run: ls build/app/outputs/flutter-apk/
             
       - name: Publish APK as artifact
         uses: actions/upload-artifact@v2
         with:
           name: apk
-          path: build\app\outputs\flutter-apk\app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
       
       - name: Create Release
         id: create_release
