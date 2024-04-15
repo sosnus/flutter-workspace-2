@@ -3,7 +3,7 @@ name: Create Release from Artifact
 on:
   workflow_run:
     # workflows: ["Dart"]
-    workflows: ["Build and Deploy"]
+    # workflows: ["Build and Deploy"]
     types:
       - completed
 
